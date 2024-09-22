@@ -53,7 +53,7 @@ You can use any editor but as I personally prefer VS Code. I will give some inst
 
 You need to install the below plugins:
 
-- ESLint by Dirk Baeumer
+- ESLint by Microsoft
 - Prettier - Code formatter by Prettier
 - Dracula Official Theme (optional)
 
@@ -83,9 +83,9 @@ Follow the below settings for VS Code -
   },
   "javascript.validate.enable": false, //disable all built-in syntax checking
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.fixAll.tslint": true,
-    "source.organizeImports": true
+    "source.fixAll.eslint": "always",
+    "source.fixAll.tslint": "always",
+    "source.organizeImports": "always"
   },
   "eslint.alwaysShowStatus": true,
   // emmet
@@ -111,17 +111,17 @@ In order to lint and format your React project automatically according to popula
 ### Install Dev Dependencies
 
 ```sh
-yarn add -D prettier
-yarn add -D babel-eslint
-npx install-peerdeps --dev eslint-config-airbnb
+yarn add -D prettier 
+yarn add -D @babel/core @babel/eslint-parser @babel/preset-react 
 yarn add -D eslint-config-prettier eslint-plugin-prettier
+npx install-peerdeps --dev eslint-config-airbnb
 ```
 
 or You can also add a new script in the scripts section like below to install everything with a single command:
 
 ```json
 scripts: {
-    "lint": "yarn add -D prettier && yarn add -D babel-eslint && npx install-peerdeps --dev eslint-config-airbnb && yarn add -D eslint-config-prettier eslint-plugin-prettier"
+    "lint": "yarn add -D prettier @babel/core @babel/eslint-parser eslint-config-prettier eslint-plugin-prettier @babel/preset-react && npx install-peerdeps --dev eslint-config-airbnb"
 }
 ```
 
@@ -133,7 +133,7 @@ yarn lint #or 'npm run lint'
 
 ### Create Linting Configuration file manually
 
-Create a `.eslintrc` file in the project root and enter the below contents:
+Create a `.eslintrc.json` file in the project root and enter the below contents:
 
 ```json
 {
@@ -142,11 +142,17 @@ Create a `.eslintrc` file in the project root and enter the below contents:
     "airbnb/hooks",
     "eslint:recommended",
     "prettier",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/jsx-runtime"
   ],
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 8
+    "requireConfigFile": false,
+    "babelOptions": {
+      "babelrc": false,
+      "configFile": false,
+      "presets": ["@babel/preset-react"]
+    }
   },
   "env": {
     "browser": true,
